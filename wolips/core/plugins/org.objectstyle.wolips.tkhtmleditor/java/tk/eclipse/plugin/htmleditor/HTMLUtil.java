@@ -150,39 +150,12 @@ public class HTMLUtil {
 		return sb.toString();
 	}
 	
-	/**
-	 * Replace comments of HTML/JSP/XML with whitespaces.
-	 * 
-	 * <ul>
-	 *   <li>replace &lt;!-- ... --&gt; to the whitespaces</li>
-	 *   <li>replace &lt;%-- ... --%&gt; to the whitespaces</li>
-	 * </ul>
-	 * 
-	 * @param source source code of the HTML/JSP/XML
-	 * @param contentsOnly
-	 * <ul>
-	 *   <li>true - &lt;!--、--&gt; and &lt;%--、--%&gt; are not replaced.<li>
-	 *   <li>false - &lt;!--、--&gt; and &lt;%--、--%&gt; are also replaced.<li>
-	 * </ul>
-	 * @return processed source code
-	 */
 	public static String comment2space(String source,boolean contentsOnly){
 		source = jspComment2space(source,contentsOnly);
 		source = FuzzyXMLUtil.comment2space(source,contentsOnly);
 		return source;
 	}
 	
-	/**
-	 * Replace comments of the JSP with whitespaces.
-	 * 
-	 * @param source source code of the JSP
-	 * @param contentsOnly 
-	 * <ul>
-	 *   <li>true - &lt;%、%&gt; are not replaced.</li>
-	 *   <li>false - &lt;%、%&gt; are also replaced.</li>
-	 * </ul>
-	 * @return processed source code
-	 */
 	public static String jspComment2space(String source,boolean contentsOnly){
 		int index = 0;
 		int last  = 0;
@@ -213,17 +186,6 @@ public class HTMLUtil {
 		return sb.toString();
 	}
 	
-	/**
-	 * Replace scriptlet in the JSP to whitespaces.
-	 * 
-	 * @param source source code of the JSP
-	 * @param contentsOnly
-	 * <ul>
-	 *   <li>true - &lt;%、%&gt; are not replaced.
-	 *   <li>false - &lt;%、%&gt; are also replaced.
-	 * </ul>
-	 * @return processed source code
-	 */
 	public static String scriptlet2space(String source,boolean contentsOnly){
 		int index = 0;
 		int last  = 0;
