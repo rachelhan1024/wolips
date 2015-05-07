@@ -75,13 +75,13 @@ public final class WOEnvironment {
     this.woVariables = new WOVariables(null);
   }
   
-  public WOEnvironment(Map<Object, Object> existingProperties) {
-    this.woVariables = new WOVariables(existingProperties);
-  }
+//  public WOEnvironment(Map<Object, Object> existingProperties) {
+//    this.woVariables = new WOVariables(existingProperties);
+//  }
   
-  public WOEnvironment(Hashtable<String, Object> existingProperties) {
+  public WOEnvironment(Map existingProperties) {
     Map<Object, Object> propertiesMap = new HashMap<Object, Object>();
-    for (String key : existingProperties.keySet()) {
+    for (Object key : existingProperties.keySet()) {
       propertiesMap.put(key, existingProperties.get(key));
     }
     this.woVariables = new WOVariables(propertiesMap);
