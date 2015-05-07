@@ -46,7 +46,6 @@ public class FuzzyXMLParser {
 	private boolean _wellFormedRequired = false;
 	private boolean _isHTML = false;
 
-	// �p�[�X�Ɏg�p���鐳�K�\��
 	private Pattern _tag = Pattern.compile("<((|/)([^<>]*))([^<]?|>)");
 	// private Pattern attr =
 	// Pattern.compile("([\\w:]+?)\\s*=(\"|')([^\"]*?)\\2");
@@ -128,12 +127,6 @@ public class FuzzyXMLParser {
 		_looseNamespaces.add(namespace);
 	}
 
-	/**
-	 * �G���[�n���h�����O�p�̃��X�i��ǉ����܂��B
-	 * 
-	 * @param listener
-	 *          ���X�i
-	 */
 	public void addErrorListener(FuzzyXMLErrorListener listener) {
 		_listeners.add(listener);
 	}
@@ -145,15 +138,6 @@ public class FuzzyXMLParser {
 		}
 	}
 
-	/**
-	 * ��̓X�g���[������XML�h�L�������g���p�[�X���܂��B
-	 * �����R�[�h��XML�錾�ɂ��������Ĕ��ʂ���܂��B
-	 * 
-	 * @param in
-	 *          ��̓X�g���[��
-	 * @return �p�[�X����
-	 * @throws IOException
-	 */
 	public FuzzyXMLDocument parse(InputStream in) throws IOException {
 		byte[] bytes = FuzzyXMLUtil.readStream(in);
 		String encode = FuzzyXMLUtil.getEncoding(bytes);
@@ -163,15 +147,6 @@ public class FuzzyXMLParser {
 		return parse(new String(bytes, encode));
 	}
 
-	/**
-	 * �t�@�C������XML�h�L�������g���p�[�X���܂��B
-	 * �����R�[�h��XML�錾�ɂ��������Ĕ��ʂ���܂��B
-	 * 
-	 * @param file
-	 *          �t�@�C��
-	 * @return �p�[�X����
-	 * @throws IOException
-	 */
 	public FuzzyXMLDocument parse(File file) throws IOException {
 		byte[] bytes = FuzzyXMLUtil.readStream(new FileInputStream(file));
 		String encode = FuzzyXMLUtil.getEncoding(bytes);
@@ -182,7 +157,7 @@ public class FuzzyXMLParser {
 	}
 
 	protected int _parse(String source, int initialOffset, boolean woOnly, boolean parseAsSynthetic) {
-		// �p�[�X���J�n
+
 		Matcher matcher = _tag.matcher(source);
 		int lastIndex = initialOffset - 1;
 		while (matcher.find()) {
@@ -196,7 +171,7 @@ public class FuzzyXMLParser {
 			}
 			String originalText = matcher.group(1);
 			String text = originalText.trim();
-			// ���^�O
+
 			if (!woOnly && text.startsWith("%")) {
 				// ignore
 				handleText(start, end, false);
@@ -239,17 +214,9 @@ public class FuzzyXMLParser {
 		return lastIndex;
 	}
 
-	/**
-	 * ��Ƃ��ēn���ꂽXML�\�[�X���p�[�X����FuzzyXMLDocument�I�u�W�F�N�g��ԋp���܂��B
-	 * 
-	 * @param source
-	 *          XML�\�[�X
-	 * @return �p�[�X���ʂ�FuzzyXMLDocument�I�u�W�F�N�g
-	 */
-	public FuzzyXMLDocument parse(String source) {
-		// �I���W�i���̃\�[�X��ۑ����Ă���
+	public FuzzyXMLDocument parse(String source) {	
 		_originalSource = source;
-		// �R�����g�ACDATA�ADOCTYPE����������
+
 		source = FuzzyXMLUtil.comment2space(source, true);
 		source = FuzzyXMLUtil.escapeScript(source);
 		source = FuzzyXMLUtil.scriptlet2space(source, true);
@@ -304,7 +271,6 @@ public class FuzzyXMLParser {
 		return doc;
 	}
 
-	/** CDATA�m�[�h���������܂��B */
 	private void handleCDATA(int offset, int end, String text) {
 		closeAutocloseTags();
 		text = text.replaceFirst("<!\\[CDATA\\[", "");
@@ -336,7 +302,6 @@ public class FuzzyXMLParser {
 		return _parse(preBlock, offset, true, false) - 1;
 	}
 
-	/** �e�L�X�g�m�[�h���������܂��B */
 	private void handleText(int offset, int end, boolean escape) {
 		String text = _originalSource.substring(offset, end);
 		// System.out.println("FuzzyXMLParser.handleText: '" + text + "'");
@@ -351,7 +316,6 @@ public class FuzzyXMLParser {
 		}
 	}
 
-	/** XML�錾�i�������߁j���������܂��B */
 	private void handleDeclaration(int offset, int end) {
 		closeAutocloseTags();
 		String text = _originalSource.substring(offset, end);
@@ -365,7 +329,6 @@ public class FuzzyXMLParser {
 
 		FuzzyXMLProcessingInstructionImpl pi = new FuzzyXMLProcessingInstructionImpl(null, name, data, offset, end - offset);
 		if (getParent() != null) {
-			// �]�v�ȕ��������
 			((FuzzyXMLElement) getParent()).appendChild(pi);
 		}
 		else {
@@ -378,7 +341,6 @@ public class FuzzyXMLParser {
 		}
 	}
 
-	/** DOCTYPE�錾���������܂��B */
 	private void handleDoctype(int offset, int end, String text) {
 		closeAutocloseTags();
 		if (_docType == null) {
@@ -422,7 +384,6 @@ public class FuzzyXMLParser {
 		}
 	}
 
-	/** ���^�O���������܂��B */
 	private void handleCloseTag(int offset, int end, String text) {
 		handleCloseTag(offset, end, text, true);
 	}
@@ -571,7 +532,6 @@ public class FuzzyXMLParser {
 		}
 
 		if (lastOpenElement != null) {
-			// ��^�O�̏ꍇ�͋�̃e�L�X�g�m�[�h��ǉ����Ă���
 			if (lastOpenElement.getChildren().length == 0) {
 				// MS: Hopefully this doesn't break things ... Sure wish I could read
 				// Japanese to know what the original author said about this :)
@@ -618,7 +578,6 @@ public class FuzzyXMLParser {
 		}
 	}
 
-	/** ��^�O���������܂��B */
 	private void handleEmptyTag(int offset, int end, boolean synthetic) {
 		closeAutocloseTags();
 		TagInfo info = parseTagContents(_originalSource.substring(offset + 1, end - 1));
@@ -630,7 +589,6 @@ public class FuzzyXMLParser {
 		else {
 			((FuzzyXMLElement) parent).appendChild(element);
 		}
-		// ������ǉ�
 		AttrInfo[] attrs = info.getAttrs();
 		for (int i = 0; i < attrs.length; i++) {
 			FuzzyXMLAttributeImpl attr = createFuzzyXMLAttribute(element, offset, attrs[i]);
@@ -660,7 +618,6 @@ public class FuzzyXMLParser {
 		}
 	}
 
-	/** �R�����g���������܂��B */
 	private void handleComment(int offset, int end, String text) {
 		closeAutocloseTags();
 		FuzzyXMLNode parent = getParent();
@@ -681,7 +638,6 @@ public class FuzzyXMLParser {
 		}
 	}
 
-	/** �J�n�^�O���������܂��B */
 	private void handleStartTag(int offset, int end, boolean synthetic) {
 		closeAutocloseTags();
 		String tagContents = _originalSource.substring(offset, end);
@@ -735,9 +691,8 @@ public class FuzzyXMLParser {
 		return attr;
 	}
 
-	/** �J�n�^�O���������܂��B */
 	private void handleStartTag(FuzzyXMLElement element, TagInfo info, int offset, int end) {
-		// ������ǉ�
+
 		AttrInfo[] attrs = info.getAttrs();
 		for (int i = 0; i < attrs.length; i++) {
 			// // ���O��Ԃ̃T�|�[�g
@@ -758,7 +713,6 @@ public class FuzzyXMLParser {
 		checkElement(element);
 	}
 
-	/** �X�^�b�N�̍Ō�̗v�f���擾���܂�(�X�^�b�N����͍폜���܂���)�B */
 	private FuzzyXMLNode getParent() {
 		if (_stack.size() == 0) {
 			return null;
@@ -766,16 +720,13 @@ public class FuzzyXMLParser {
 		return _stack.get(_stack.size() - 1);
 	}
 
-	/** �^�O�������p�[�X���܂��B */
 	private TagInfo parseTagContents(String text) {
-		// �g����
+
 		Range trimmedRange = Range.trimmedRange(text);
 		text = trimmedRange.trim(text);
-		// ���^�O��������Ō�̃X���b�V�����폜
 		if (text.endsWith("/")) {
 			text = text.substring(0, text.length() - 1);
 		}
-		// �ŏ��̃X�y�[�X�܂ł��^�O��
 		TagInfo info = new TagInfo();
 		if (FuzzyXMLUtil.getSpaceIndex(text) != -1) {
 			info.name = text.substring(0, FuzzyXMLUtil.getSpaceIndex(text)).trim();
@@ -792,7 +743,6 @@ public class FuzzyXMLParser {
 		Start, BeforeAttributeName, InAttributeName, AfterAttributeName, InAttributeValue, InNestedTag,
 	}
 
-	/** �A�g���r���[�g�������p�[�X���܂��B */
 	private void parseAttributeContents(TagInfo info, String text) {
 
 		AttributeParseState state = AttributeParseState.Start;
