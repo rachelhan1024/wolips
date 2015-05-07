@@ -7,9 +7,6 @@ import jp.aonir.fuzzyxml.xpath.FuzzyXMLNodePointerFactory;
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.jxpath.ri.JXPathContextReferenceImpl;
 
-/**
- * FuzzyXMLのノードツリーをXPathで検索するためのユーティリティクラス。
- */
 public class XPath {
     
     static {
