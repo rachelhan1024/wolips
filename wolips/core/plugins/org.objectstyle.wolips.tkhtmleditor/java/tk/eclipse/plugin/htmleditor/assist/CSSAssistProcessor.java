@@ -29,20 +29,6 @@ import tk.eclipse.plugin.htmleditor.HTMLUtil;
 
 import com.steadystate.css.parser.CSSOMParser;
 
-/**
- * This provides code completion for class attribute of HTML tags.
- * <p>
- * Completion proposals is got from an internal stylesheet like following:
- * <pre>
- * &lt;style type=&quot;text/css&quot;&gt;
- * ...
- * &lt;/style&gt;
- * </pre>
- * And external stylesheet that is included as following:
- * <pre>
- * &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;...&quot; /&gt;
- * </pre>
- */
 public class CSSAssistProcessor {
 
   private HashMap<String, ArrayList<String>> _rules = new HashMap<String, ArrayList<String>>();
@@ -136,7 +122,6 @@ public class CSSAssistProcessor {
       //			} catch(Exception ex){
       //			}
     }
-    // ‘Š‘ÎƒpƒX
     return _file.getProject().getFile(_file.getParent().getProjectRelativePath().append(path));
   }
 
